@@ -23,12 +23,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  List<SortItemPageBean> sortItemPageBean = <SortItemPageBean>[];
+
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = new TabController(vsync: this, length: choices.length);
+
+    choices.map((choice) {
+      sortItemPageBean.add(new SortItemPageBean(cid: choice.title));
+    }).toList();
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -40,14 +46,6 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> listWidget = <Widget>[];
-    listWidget.add(new Center(
-      child: new HomeMainPage(),
-    ));
-    listWidget.add(new Center(
-      child: new Text("分区"),
-    ));
-    listWidget.add(new MePage());
     return new Scaffold(
       key: _scaffoldKey,
       appBar: new AppBar(
@@ -68,7 +66,6 @@ class _MyHomePageState extends State<MyHomePage>
         centerTitle: true,
         titleSpacing: 10.0,
         automaticallyImplyLeading: true,
-
         actions: <Widget>[
           new IconButton(
             icon: new Icon(Icons.file_download),
@@ -85,6 +82,7 @@ class _MyHomePageState extends State<MyHomePage>
         ],
       ),
       drawer: Drawer(
+        key: _scaffoldKey,
         child: ListView(
           children: <Widget>[
             DrawerHeader(
@@ -146,7 +144,24 @@ class _MyHomePageState extends State<MyHomePage>
         ),
       ),
       body: new TabBarView(
-        children: listWidget,
+        children: sortItemPageBean.map((bean) {
+          if (bean.page == null) {
+            bean.offset = 0.0;
+            bean.currentPage = 0;
+            if (bean.cid == choices[0].title) {
+              print(bean.offset);
+              bean.page = HomeMainPage(
+                cid: bean.cid,
+                currentPage: bean.currentPage,
+              );
+            } else if (bean.cid == choices[1].title) {
+              bean.page = Text("第二页");
+            } else if (bean.cid == choices[2].title) {
+              bean.page = new Text("第三页");
+            }
+          }
+          return bean.page;
+        }).toList(),
         controller: _tabController,
 //          physics: NeverScrollableScrollPhysics(),
       ),
@@ -163,5 +178,4 @@ class _MyHomePageState extends State<MyHomePage>
     WidgetsBinding.instance.removeObserver(this);
     _tabController.dispose();
   }
-
 }

@@ -46,7 +46,9 @@ flutter:
     - images/ic_play_circle_outline_black_24dp.png
     - images/ic_subtitles_black_24dp.png
     - images/ic_watching.png
-
+    - images/ic_following_bangumi.png
+    - images/ic_bangumi_category.png
+    - images/ic_bangumi_calendar_7.png
 
 
   # To add assets to your application, add an assets section, like this:

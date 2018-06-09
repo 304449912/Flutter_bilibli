@@ -1,8 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:gedu_bilibli/ui/home/recommend_page.dart';
+import 'package:gedu_bilibli/ui/home/home_bangumi_page.dart';
+import 'package:gedu_bilibli/ui/home/home_recommend_page.dart';
 
-class HomeMainPage extends StatelessWidget {
-  static const List<String> titles = <String>["推荐", "追番", "关注"];
+class HomeMainPage extends StatefulWidget {
+
+  List<String> titles = <String>["推荐", "追番", "关注"];
+  final String cid;
+  ScrollController controller;
+  int currentPage;
+
+  HomeMainPage({@required this.cid, @required this.currentPage});
+
+  @override
+  State<StatefulWidget> createState() => HomeMainPageState();
+
+}
+
+class HomeMainPageState extends State<HomeMainPage>
+    with SingleTickerProviderStateMixin {
+  List<SortItemPageBean> sortItemPageBean = <SortItemPageBean>[];
+  TabController _tabController;
+  @override
+  void initState() {
+    super.initState();
+    _tabController =
+        new TabController(length: widget.titles.length, vsync: this,initialIndex: widget.currentPage);
+    _tabController.addListener((){
+      widget.currentPage=_tabController.index;
+      print("-----------${_tabController.index}");
+    });
+    widget.titles.map((name) {
+      print('_TreeItemTabsPageState $name');
+      sortItemPageBean.add(new SortItemPageBean(cid: name));
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,64 +41,62 @@ class HomeMainPage extends StatelessWidget {
       length: 3,
       child: new Scaffold(
         appBar: new TabBar(
+          controller: _tabController,
           unselectedLabelColor: Colors.grey,
           labelColor: Colors.blue,
           indicatorPadding: new EdgeInsets.fromLTRB(45.0, 10.0, 45.0, 10.0),
           isScrollable: false,
-          tabs: titles.map((String title) {
+          tabs: widget.titles.map((String title) {
             return new Tab(
               text: title,
             );
           }).toList(),
         ),
         body: new TabBarView(
-          children: <Widget>[
-            RecommendListPage(),
-            RecommendListPage(),
-            new CustomScrollView(
-              slivers: <Widget>[
-                const SliverAppBar(
-                  pinned: true,
-                  expandedHeight: 250.0,
-                  flexibleSpace: const FlexibleSpaceBar(
-                    title: const Text('Demo'),
-                  ),
-                ),
-                new SliverGrid(
-                  gridDelegate: new SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200.0,
-                    mainAxisSpacing: 10.0,
-                    crossAxisSpacing: 10.0,
-                    childAspectRatio: 4.0,
-                  ),
-                  delegate: new SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return new Container(
-                        alignment: Alignment.center,
-                        color: Colors.teal[100 * (index % 9)],
-                        child: new Text('grid item $index'),
-                      );
-                    },
-                    childCount: 20,
-                  ),
-                ),
-                new SliverFixedExtentList(
-                  itemExtent: 350.0,
-                  delegate: new SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      return new Container(
-                        alignment: Alignment.center,
-                        color: Colors.lightBlue[100 * (index % 9)],
-                        child: new Text('list item $index'),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ],
+          controller: _tabController,
+          children: sortItemPageBean.map((bean) {
+            if (bean.page == null) {
+              bean.offset = 0.0;
+              if (bean.cid == widget.titles[0]) {
+                print(bean.offset);
+                bean.page = RecommendListPage(
+                  cid: bean.cid,
+                  offset: bean.offset,
+                );
+              } else if (bean.cid == widget.titles[1]) {
+                bean.page = BangUmiListPage(
+                  cid: bean.cid,
+                  offset: bean.offset,
+                );
+              } else if (bean.cid == widget.titles[2]) {
+                bean.page = new Text("第三页");
+              }
+            }
+            return bean.page;
+          }).toList(),
         ),
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+}
+
+class SortItemPageBean {
+  String cid;
+
+  ///当前TabBar page
+  Widget page;
+
+  ///当前页面滑动的位置
+  double offset;
+
+  ///当前页面选中的位置
+  int currentPage;
+
+  SortItemPageBean({@required this.cid});
 }

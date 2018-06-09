@@ -6,6 +6,13 @@ class MePage extends StatefulWidget {
 }
 
 class _MePageState extends State<MePage> {
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    print("me pages init");
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return new Stack(

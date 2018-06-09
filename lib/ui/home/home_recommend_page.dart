@@ -6,29 +6,46 @@ import 'package:gedu_bilibli/net/http_provider.dart';
 import 'package:banner/banner.dart';
 
 class RecommendListPage extends StatefulWidget {
+  final String cid;
+  ScrollController controller;
+  double offset;
+  List<RecommendInfo> _recommendInfos = List();
+  List<RecommendBanner> _recommendBanner = List();
+  bool loading = true;
+
+  RecommendListPage({@required this.cid, @required this.offset});
+
   @override
   State<StatefulWidget> createState() => RecommendListPageState();
 }
 
 class RecommendListPageState extends State<RecommendListPage> {
   BiliBliProvider biliBliProvider;
-  List<RecommendInfo> _recommendInfos = List();
-  List<RecommendBanner> _recommendBanner = List();
+
   @override
   void initState() {
     biliBliProvider = BiliBliProvider();
-    _loadData();
+    if (widget.loading) {
+      _loadData();
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    ///ScrollController是控制ListView滑动到那个位置的，设置
+    widget.controller = new ScrollController(initialScrollOffset: widget.offset);
+    widget.controller.addListener(() {
+      ///当绑定了该ScrollController的ListView滑动时就会调用该方法
+      widget.offset = widget.controller.offset;
+      print('_SortItemPageState _buildTabPage ${widget.offset}');
+    });
     List<Widget> widgets = List();
-    if (_recommendBanner.length > 0) {
+    if (widget._recommendBanner.length > 0) {
       widgets.add(SliverToBoxAdapter(
         child: new BannerView(
           height: 120.0,
-          data: _recommendBanner,
+          data: widget._recommendBanner,
           buildShowView: (index, data) {
             return new Image.network(
               data.image,
@@ -41,14 +58,14 @@ class RecommendListPageState extends State<RecommendListPage> {
         ),
       ));
     }
-    for (int i = 0; i < _recommendInfos.length; i++) {
+    for (int i = 0; i < widget._recommendInfos.length; i++) {
       widgets.add(new SliverToBoxAdapter(
           child: new _headView(
-        headBean: _recommendInfos[i].head,
+        headBean: widget._recommendInfos[i].head,
       )));
       widgets.add(SliverGrid.count(
         crossAxisCount: 2,
-        children: _recommendInfos[i]
+        children: widget._recommendInfos[i]
             .body
             .map((BodyBean body) => Card(
                   margin: new EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 15.0),
@@ -84,32 +101,38 @@ class RecommendListPageState extends State<RecommendListPage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  new Padding(
-                                    padding: new EdgeInsets.fromLTRB(
-                                        10.0, 0.0, 10.0, 0.0),
-                                    child: new Image.asset(
-                                      _recommendInfos[i].type == 'live'
-                                          ? "images/ic_play_circle_outline_black_24dp.png"
-                                          : "images/ic_play_circle_outline_black_24dp.png",
-                                      width: 20.0,
-                                      height: 20.0,
+                                  new Offstage(
+                                    offstage: widget._recommendInfos[i].type == 'live',
+                                    child: new Padding(
+                                      padding: new EdgeInsets.fromLTRB(
+                                          10.0, 0.0, 10.0, 0.0),
+                                      child: new Image.asset(
+                                        widget._recommendInfos[i].type == 'live'
+                                            ? "images/ic_play_circle_outline_black_24dp.png"
+                                            : "images/ic_play_circle_outline_black_24dp.png",
+                                        width: 20.0,
+                                        height: 20.0,
+                                      ),
                                     ),
                                   ),
-                                  new Text(_recommendInfos[i].type == 'live'
+                                  new Text(widget._recommendInfos[i].type == 'live'
                                       ? body.up
                                       : body.play == null ? "" : body.play),
-                                  new Padding(
-                                    padding: new EdgeInsets.fromLTRB(
-                                        20.0, 0.0, 10.0, 0.0),
-                                    child: new Image.asset(
-                                      _recommendInfos[i].type == 'live'
-                                          ? "images/ic_watching.png"
-                                          : "images/ic_subtitles_black_24dp.png",
-                                      width: 20.0,
-                                      height: 20.0,
+                                  new Offstage(
+                                    offstage: widget._recommendInfos[i].type == 'live',
+                                    child: new Padding(
+                                      padding: new EdgeInsets.fromLTRB(
+                                          20.0, 0.0, 10.0, 0.0),
+                                      child: new Image.asset(
+                                        widget._recommendInfos[i].type == 'live'
+                                            ? "images/ic_watching.png"
+                                            : "images/ic_subtitles_black_24dp.png",
+                                        width: 20.0,
+                                        height: 20.0,
+                                      ),
                                     ),
                                   ),
-                                  new Text(_recommendInfos[i].type == 'live'
+                                  new Text(widget._recommendInfos[i].type == 'live'
                                       ? body.online.toString()
                                       : body.danmaku == null
                                           ? ""
@@ -127,6 +150,7 @@ class RecommendListPageState extends State<RecommendListPage> {
       ));
     }
     return new CustomScrollView(
+      controller: widget.controller,
       shrinkWrap: true,
       slivers: widgets,
     );
@@ -134,17 +158,16 @@ class RecommendListPageState extends State<RecommendListPage> {
 
   void _loadData() async {
     var infos = await biliBliProvider.fetchRecommendInfoListModel();
-     var banners = await biliBliProvider.fetchRecommendBannerListModel();
-
+    var banners = await biliBliProvider.fetchRecommendBannerListModel();
     banners.map((RecommendBanner banner) {
       print(banner.title);
     }).toList();
     setState(() {
-      _recommendInfos.addAll(infos);
-      _recommendBanner.addAll(banners);
+      widget._recommendInfos.addAll(infos);
+      widget._recommendBanner.addAll(banners);
+      widget.loading=false;
     });
   }
-
 }
 
 class _headView extends StatelessWidget {
