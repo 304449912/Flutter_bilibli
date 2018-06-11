@@ -35,6 +35,7 @@ class RecommendListPageState extends State<RecommendListPage> {
   @override
   Widget build(BuildContext context) {
     ///ScrollController是控制ListView滑动到那个位置的，设置
+    double width =MediaQuery.of(context).size.width;
     widget.controller = new ScrollController(
         initialScrollOffset: widget.pageState[widget.cid].offset);
     widget.controller.addListener(() {
@@ -49,7 +50,7 @@ class RecommendListPageState extends State<RecommendListPage> {
           data: widget._recommendBanner,
           buildShowView: (index, data) {
             return new CachedNetworkImage(
-              imageUrl:data.image,
+              imageUrl: data.image,
               fit: BoxFit.cover,
             );
           },
@@ -73,6 +74,7 @@ class RecommendListPageState extends State<RecommendListPage> {
                   child: InkWell(
                     onTap: () {},
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         CachedNetworkImage(
                           fadeInDuration: Duration(milliseconds: 300),
@@ -80,71 +82,67 @@ class RecommendListPageState extends State<RecommendListPage> {
                           imageUrl: body.cover,
                           fit: BoxFit.cover,
                           width: double.infinity,
-                          height: 110.0,
+                          height: (width-50)/3,
                         ),
-                        new Container(
-                          height: 70.0,
-                          child: new Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                child: new Text(
-                                  body.title == null ? "" : body.title,
-                                  maxLines: 2,
-                                ),
-                                padding:
-                                    EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                              ),
-                              new Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  new Offstage(
-                                    offstage: widget._recommendInfos[i].type ==
-                                        'live',
-                                    child: new Padding(
-                                      padding: new EdgeInsets.fromLTRB(
-                                          10.0, 0.0, 10.0, 0.0),
-                                      child: new Image.asset(
-                                        widget._recommendInfos[i].type == 'live'
-                                            ? "images/ic_play_circle_outline_black_24dp.png"
-                                            : "images/ic_play_circle_outline_black_24dp.png",
-                                        width: 20.0,
-                                        height: 20.0,
-                                      ),
-                                    ),
-                                  ),
-                                  new Text(
-                                      widget._recommendInfos[i].type == 'live'
-                                          ? body.up
-                                          : body.play == null ? "" : body.play),
-                                  new Offstage(
-                                    offstage: widget._recommendInfos[i].type ==
-                                        'live',
-                                    child: new Padding(
-                                      padding: new EdgeInsets.fromLTRB(
-                                          20.0, 0.0, 10.0, 0.0),
-                                      child: new Image.asset(
-                                        widget._recommendInfos[i].type == 'live'
-                                            ? "images/ic_watching.png"
-                                            : "images/ic_subtitles_black_24dp.png",
-                                        width: 20.0,
-                                        height: 20.0,
-                                      ),
-                                    ),
-                                  ),
-                                  new Text(
-                                      widget._recommendInfos[i].type == 'live'
-                                          ? body.online.toString()
-                                          : body.danmaku == null
-                                              ? ""
-                                              : body.danmaku),
-                                ],
-                              ),
-                            ],
+                        Padding(
+                          child: new Text(
+                            body.title == null ? "" : body.title,
+                            maxLines: 2,
                           ),
-                        )
+                          padding:
+                          EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 0.0),
+                        ),
+                        new Row(
+                          children: <Widget>[
+                            new Offstage(
+                              offstage: widget._recommendInfos[i].type ==
+                                  'live',
+                              child: new Padding(
+                                padding: new EdgeInsets.fromLTRB(
+                                    5.0, 0.0, 0.0, 0.0),
+                                child: new Image.asset(
+                                  widget._recommendInfos[i].type == 'live'
+                                      ? "images/ic_play_circle_outline_black_24dp.png"
+                                      : "images/ic_play_circle_outline_black_24dp.png",
+                                  width: 20.0,
+                                  height: 20.0,
+                                ),
+                              ),
+                            ),
+                            new Padding(
+                              padding: new EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+                              child: new Text(
+                                  widget._recommendInfos[i].type == 'live'
+                                      ? body.up
+                                      : body.play == null ? "" : body.play),),
+                            new Offstage(
+                              offstage: widget._recommendInfos[i].type ==
+                                  'live',
+                              child: new Padding(
+                                padding: new EdgeInsets.fromLTRB(
+                                    10.0, 0.0, 0.0, 0.0),
+                                child: new Image.asset(
+                                  widget._recommendInfos[i].type == 'live'
+                                      ? "images/ic_watching.png"
+                                      : "images/ic_subtitles_black_24dp.png",
+                                  width: 20.0,
+                                  height: 20.0,
+                                ),
+                              ),
+                            ),
+                            new Padding(
+                              padding: new EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+                              child: new Text(
+                                widget._recommendInfos[i].type == 'live'
+                                    ? body.online.toString()
+                                    : body.danmaku == null
+                                    ? ""
+                                    : body.danmaku,
+                                maxLines: 1,),
+                            ),
+
+                          ],
+                        ),
                       ],
                     ),
                   ),

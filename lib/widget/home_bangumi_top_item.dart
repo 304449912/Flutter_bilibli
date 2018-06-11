@@ -5,9 +5,9 @@ class BangUmiTopItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
    return new Container(
-      padding: new EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),
+      padding: new EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 10.0),
       child: new Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           new RaisedButton(
             onPressed: () {},

@@ -17,8 +17,8 @@ class BangUmiListPage extends StatefulWidget {
   Previous _previous;
   List<BangUmiHead> _recommendBanner = List();
   List<BangUmiInfo> _bangUmiInfoList = List();
-  Map<String ,SortItemPageBean > pageState;
-  BangUmiListPage({@required this.cid,@required this.pageState});
+  Map<String, SortItemPageBean> pageState;
+  BangUmiListPage({@required this.cid, @required this.pageState});
 
   @override
   State<StatefulWidget> createState() => BangUmiListPageState();
@@ -30,7 +30,8 @@ class BangUmiListPageState extends State<BangUmiListPage> {
   @override
   void initState() {
     biliBliProvider = BiliBliProvider();
-    if(widget._bangUmiInfoList.length==0&&widget._bangUmiInfoList.length==0){
+    if (widget._bangUmiInfoList.length == 0 &&
+        widget._bangUmiInfoList.length == 0) {
       _loadData();
       _loadBangUmiInfoList();
     }
@@ -40,7 +41,8 @@ class BangUmiListPageState extends State<BangUmiListPage> {
   @override
   Widget build(BuildContext context) {
     ///ScrollController是控制ListView滑动到那个位置的，设置
-    widget.controller = new ScrollController(initialScrollOffset: widget.pageState[widget.cid].offset);
+    widget.controller = new ScrollController(
+        initialScrollOffset: widget.pageState[widget.cid].offset);
     widget.controller.addListener(() {
       ///当绑定了该ScrollController的ListView滑动时就会调用该方法
       widget.pageState[widget.cid].offset = widget.controller.offset;
@@ -54,7 +56,7 @@ class BangUmiListPageState extends State<BangUmiListPage> {
           data: widget._recommendBanner,
           buildShowView: (index, data) {
             return new CachedNetworkImage(
-              imageUrl:data.img,
+              imageUrl: data.img,
               fit: BoxFit.cover,
             );
           },
@@ -88,65 +90,58 @@ class BangUmiListPageState extends State<BangUmiListPage> {
       childAspectRatio: 0.603,
       crossAxisCount: 3,
       children: widget._serializing
-          .map((BangUmiBean bangUmi) => new SizedBox(
-                height: 200.0,
-                child: Card(
-                  margin: new EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 15.0),
-                  elevation: 0.0,
-                  child: InkWell(
-                    onTap: () {},
-                    child: Column(
-                      children: <Widget>[
-                        new Stack(
-                          children: <Widget>[
-                            new CachedNetworkImage(
-                              fadeInDuration: Duration(milliseconds: 300),
-                              fadeOutDuration: Duration(milliseconds: 100),
-                              imageUrl:bangUmi.cover,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: 160.0
-
-                            ),
-                            Padding(
-                              padding:
-                                  new EdgeInsets.fromLTRB(5.0, 140.0, 0.0, 0.0),
+          .map((BangUmiBean bangUmi) => Card(
+                margin: new EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 15.0),
+                elevation: 1.0,
+                child: InkWell(
+                  onTap: () {},
+                  child: Column(
+                    children: <Widget>[
+                      new Stack(
+                        children: <Widget>[
+                          new CachedNetworkImage(
+                            fadeInDuration: Duration(milliseconds: 300),
+                            fadeOutDuration: Duration(milliseconds: 100),
+                            imageUrl: bangUmi.cover,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
+                          new Positioned(
+                              bottom: 5.0,
+                              left: 5.0,
                               child: new Text(
                                 '${bangUmi.watchingCount}人在看',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 12.0),
+                              )),
+                        ],
+                      ),
+                      new Container(
+                        child: new Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              child: new Text(
+                                bangUmi.title == null ? "" : bangUmi.title,
+                                maxLines: 1,
+                                textAlign: TextAlign.left,
+                              ),
+                              padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                            ),
+                            new Padding(
+                              padding:
+                                  new EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
+                              child: new Text(
+                                '更新到${bangUmi.newestEpIndex}话',
+                                textAlign: TextAlign.left,
+                                maxLines: 1,
                               ),
                             ),
                           ],
                         ),
-                        new Container(
-                          height: 50.0,
-                          child: new Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                child: new Text(
-                                  bangUmi.title == null ? "" : bangUmi.title,
-                                  maxLines: 1,
-                                  textAlign: TextAlign.left,
-                                ),
-                                padding:
-                                    EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                              ),
-                              new Padding(
-                                padding: new EdgeInsets.fromLTRB(
-                                    10.0, 0.0, 0.0, 0.0),
-                                child: new Text(
-                                  '更新到${bangUmi.newestEpIndex}话',
-                                  textAlign: TextAlign.left,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
               ))
@@ -176,52 +171,42 @@ class BangUmiListPageState extends State<BangUmiListPage> {
         childAspectRatio: 0.663,
         crossAxisCount: 3,
         children: widget._previous.list
-            .map((BangUmiBean bangUmi) => new SizedBox(
-                  height: 200.0,
-                  child: Card(
-                    margin: new EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 15.0),
-                    elevation: 0.0,
-                    child: InkWell(
-                      onTap: () {},
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          new Stack(
-                            children: <Widget>[
-                              new CachedNetworkImage(
-                                fadeInDuration: Duration(milliseconds: 300),
-                                fadeOutDuration: Duration(milliseconds: 100),
-                                imageUrl: bangUmi.cover,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: 160.0,
-                              ),
-                              Padding(
-                                padding: new EdgeInsets.fromLTRB(
-                                    5.0, 140.0, 0.0, 0.0),
+            .map((BangUmiBean bangUmi) => Card(
+                  margin: new EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 15.0),
+                  elevation: 1.0,
+                  child: InkWell(
+                    onTap: () {},
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        new Stack(
+                          children: <Widget>[
+                            new CachedNetworkImage(
+                              fadeInDuration: Duration(milliseconds: 300),
+                              fadeOutDuration: Duration(milliseconds: 100),
+                              imageUrl: bangUmi.cover,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            ),
+                            new Positioned(
+                                bottom: 5.0,
+                                left: 5.0,
                                 child: new Text(
                                   '${converString(bangUmi.favourites)}人在追番',
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 12.0),
-                                ),
-                              ),
-                            ],
+                                )),
+                          ],
+                        ),
+                        Padding(
+                          child: new Text(
+                            bangUmi.title == null ? "" : bangUmi.title,
+                            maxLines: 1,
+                            textAlign: TextAlign.left,
                           ),
-                          new Row(
-                            children: <Widget>[
-                              Padding(
-                                child: new Text(
-                                  bangUmi.title == null ? "" : bangUmi.title,
-                                  maxLines: 1,
-                                  textAlign: TextAlign.left,
-                                ),
-                                padding:
-                                    EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
+                          padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0),
+                        )
+                      ],
                     ),
                   ),
                 ))
@@ -249,7 +234,7 @@ class BangUmiListPageState extends State<BangUmiListPage> {
                 (BuildContext context, int index) {
               return Card(
                 margin: new EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 15.0),
-                elevation: 0.0,
+                elevation: 1.0,
                 child: InkWell(
                   onTap: () {},
                   child: Column(
