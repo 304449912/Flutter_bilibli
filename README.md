@@ -7,16 +7,16 @@ bilibli第三方应用，使用Flutter编写，项目中用到的api均抓包得
 ### 效果图
 ##### IOS
 
-< img src="screen/1.jpeg" height="300em" />
-< img src="screen/2.jpeg" height="300em" />
-< img src="screen/3.jpeg" height="300em" />
-< img src="screen/4.jpeg" height="300em" />
-< img src="screen/5.jpeg" height="300em" />
+< img src="1.jpeg" height="300em" />
+< img src="2.jpeg" height="300em" />
+< img src="3.jpeg" height="300em" />
+< img src="4.jpeg" height="300em" />
+< img src="5.jpeg" height="300em" />
 
 ##### Android
 
-< img src="screen/6.jpeg" height="300em" />
-< img src="screen/7.jpeg" height="300em" />
-< img src="screen/8.jpeg" height="300em" />
-< img src="screen/9.jpeg" height="300em" />
-< img src="screen/10.jpeg" height="300em" />
+< img src="6.jpeg" height="300em" />
+< img src="7.jpeg" height="300em" />
+< img src="8.jpeg" height="300em" />
+< img src="9.jpeg" height="300em" />
+< img src="10.jpeg" height="300em" />
