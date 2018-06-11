@@ -9,7 +9,6 @@ class BottomTabPageSelector extends StatelessWidget {
     this.color,
     this.choices,
     this.selectedColor, this.tabIndex,
-    this.listener
   }) :   super(key: key);
 
   final TabController controller;
@@ -17,7 +16,6 @@ class BottomTabPageSelector extends StatelessWidget {
   final Color selectedColor;
   final int tabIndex;
   final List<Choice> choices;
-  final ValueChanged<int> listener;
 
   ///计算颜色值
   Color getBackground(int tabIndex, TabController tabController, ColorTween selectedColorTween,ColorTween previousColorTween,){
@@ -66,7 +64,7 @@ class BottomTabPageSelector extends StatelessWidget {
               mainAxisAlignment:MainAxisAlignment.spaceEvenly ,
               children:  new List<Widget>.generate(choices.length, (int tabIndex) {
                 return  new FlatButton(
-                  onPressed: (){controller.animateTo(tabIndex);listener(tabIndex);},
+                  onPressed: (){controller.animateTo(tabIndex);},
                   child: new Column(
                     children: [
                       new Icon(choices[tabIndex].icon,

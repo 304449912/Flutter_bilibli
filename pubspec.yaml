@@ -15,7 +15,7 @@ dependencies:
   fluttertoast: ^2.0.3
   banner_view: ^1.0.0
   banner: ^0.0.5
-
+  flutter_cache_manager: ^0.1.1
 
 dev_dependencies:
   flutter_test:

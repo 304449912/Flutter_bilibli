@@ -5,19 +5,20 @@ import 'package:gedu_bilibli/model/bilibli_bangumi_info.dart';
 import 'package:gedu_bilibli/model/bilibli_recommend.dart';
 import 'package:gedu_bilibli/net/http_provider.dart';
 import 'package:banner/banner.dart';
+import 'package:gedu_bilibli/ui/home/home_main_page.dart';
 import 'package:gedu_bilibli/utils/string_utils.dart';
+import 'package:gedu_bilibli/widget/cached_network_image.dart';
 import 'package:gedu_bilibli/widget/home_bangumi_top_item.dart';
 
 class BangUmiListPage extends StatefulWidget {
   final String cid;
   ScrollController controller;
-  double offset;
   List<BangUmiBean> _serializing = List();
   Previous _previous;
   List<BangUmiHead> _recommendBanner = List();
   List<BangUmiInfo> _bangUmiInfoList = List();
-
-  BangUmiListPage({@required this.cid, @required this.offset});
+  Map<String ,SortItemPageBean > pageState;
+  BangUmiListPage({@required this.cid,@required this.pageState});
 
   @override
   State<StatefulWidget> createState() => BangUmiListPageState();
@@ -39,11 +40,10 @@ class BangUmiListPageState extends State<BangUmiListPage> {
   @override
   Widget build(BuildContext context) {
     ///ScrollController是控制ListView滑动到那个位置的，设置
-    widget.controller = new ScrollController(initialScrollOffset: widget.offset);
+    widget.controller = new ScrollController(initialScrollOffset: widget.pageState[widget.cid].offset);
     widget.controller.addListener(() {
       ///当绑定了该ScrollController的ListView滑动时就会调用该方法
-      widget.offset = widget.controller.offset;
-      print('_SortItemPageState _buildTabPage ${widget.offset}');
+      widget.pageState[widget.cid].offset = widget.controller.offset;
     });
     List<Widget> widgets = List();
     //添加banner
@@ -53,8 +53,8 @@ class BangUmiListPageState extends State<BangUmiListPage> {
           height: 120.0,
           data: widget._recommendBanner,
           buildShowView: (index, data) {
-            return new Image.network(
-              data.img,
+            return new CachedNetworkImage(
+              imageUrl:data.img,
               fit: BoxFit.cover,
             );
           },
@@ -99,14 +99,14 @@ class BangUmiListPageState extends State<BangUmiListPage> {
                       children: <Widget>[
                         new Stack(
                           children: <Widget>[
-                            FadeInImage.assetNetwork(
+                            new CachedNetworkImage(
                               fadeInDuration: Duration(milliseconds: 300),
                               fadeOutDuration: Duration(milliseconds: 100),
-                              image: bangUmi.cover,
+                              imageUrl:bangUmi.cover,
                               fit: BoxFit.cover,
                               width: double.infinity,
-                              height: 160.0,
-                              placeholder: 'images/placeholder.jpg',
+                              height: 160.0
+
                             ),
                             Padding(
                               padding:
@@ -188,14 +188,13 @@ class BangUmiListPageState extends State<BangUmiListPage> {
                         children: <Widget>[
                           new Stack(
                             children: <Widget>[
-                              FadeInImage.assetNetwork(
+                              new CachedNetworkImage(
                                 fadeInDuration: Duration(milliseconds: 300),
                                 fadeOutDuration: Duration(milliseconds: 100),
-                                image: bangUmi.cover,
+                                imageUrl: bangUmi.cover,
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                                 height: 160.0,
-                                placeholder: 'images/placeholder.jpg',
                               ),
                               Padding(
                                 padding: new EdgeInsets.fromLTRB(
@@ -258,14 +257,13 @@ class BangUmiListPageState extends State<BangUmiListPage> {
                     children: <Widget>[
                       new Stack(
                         children: <Widget>[
-                          FadeInImage.assetNetwork(
+                          new CachedNetworkImage(
                             fadeInDuration: Duration(milliseconds: 300),
                             fadeOutDuration: Duration(milliseconds: 100),
-                            image: widget._bangUmiInfoList[index].cover,
+                            imageUrl: widget._bangUmiInfoList[index].cover,
                             fit: BoxFit.cover,
                             width: double.infinity,
                             height: 160.0,
-                            placeholder: 'images/placeholder.jpg',
                           ),
                         ],
                       ),

@@ -6,6 +6,7 @@ import 'package:gedu_bilibli/net/http_provider.dart';
 import 'package:gedu_bilibli/utils/navigator.dart';
 import 'package:gedu_bilibli/widget/ProgreessDialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gedu_bilibli/widget/cached_network_image.dart';
 class MeiZiListPage extends StatefulWidget {
 
   @override
@@ -62,13 +63,13 @@ class _MeiZiListListState extends State<MeiZiListPage> {
                   child: InkWell(
                     onTap: () => goToMeiZiDetail(context, _girlList,girl),
                     child: IntrinsicHeight(
-                      child: FadeInImage.assetNetwork(
+                      child: new CachedNetworkImage(
                         fadeInDuration: Duration(milliseconds: 300),
                         fadeOutDuration: Duration(milliseconds: 100),
-                        image: girl.url,
+                        imageUrl: girl.url,
                         fit: BoxFit.cover,
                         width: double.infinity,
-                        placeholder: 'images/placeholder.jpg',
+
                       ),
                     ),
                   ),

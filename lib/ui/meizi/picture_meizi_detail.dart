@@ -1,5 +1,6 @@
 import 'package:gedu_bilibli/model/girl_model.dart';
 import 'package:gedu_bilibli/net/http_provider.dart';
+import 'package:gedu_bilibli/widget/cached_network_image.dart';
 import 'package:zoomable_image/zoomable_image.dart';
 
 import 'package:flutter/material.dart';
@@ -39,14 +40,13 @@ class _MeiZiDetailState extends State<MeiZiDetail> {
           children: _girlModels
               .map((GirlModel girl) => Container(
                     alignment: Alignment.center,
-                    child: FadeInImage.assetNetwork(
+                    child: new CachedNetworkImage(
                       fadeInDuration: Duration(milliseconds: 300),
                       fadeOutDuration: Duration(milliseconds: 100),
-                      image: girl.url,
+                      imageUrl: girl.url,
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: 610.0,
-                      placeholder: 'images/placeholder.jpg',
                     ),
                   ))
               .toList(),

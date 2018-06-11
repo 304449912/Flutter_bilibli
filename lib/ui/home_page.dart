@@ -11,6 +11,8 @@ const List<Choice> choices = const <Choice>[
   const Choice(title: '知识体系', icon: Icons.memory),
 ];
 
+List<String> titles = <String>["推荐", "追番", "关注"];
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -23,17 +25,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>
     with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  List<SortItemPageBean> sortItemPageBean = <SortItemPageBean>[];
-
+  Map<String, SortItemPageBean> pageState = Map<String, SortItemPageBean>();
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _tabController = new TabController(vsync: this, length: choices.length);
-
     choices.map((choice) {
-      sortItemPageBean.add(new SortItemPageBean(cid: choice.title));
+      pageState.addAll({choice.title: SortItemPageBean(cid: choice.title)});
+    }).toList();
+    titles.map((name) {
+      pageState.addAll({name: SortItemPageBean(cid: name)});
     }).toList();
     WidgetsBinding.instance.addObserver(this);
   }
@@ -82,7 +85,6 @@ class _MyHomePageState extends State<MyHomePage>
         ],
       ),
       drawer: Drawer(
-        key: _scaffoldKey,
         child: ListView(
           children: <Widget>[
             DrawerHeader(
@@ -144,15 +146,15 @@ class _MyHomePageState extends State<MyHomePage>
         ),
       ),
       body: new TabBarView(
-        children: sortItemPageBean.map((bean) {
+        children: pageState.values.map((bean) {
           if (bean.page == null) {
             bean.offset = 0.0;
             bean.currentPage = 0;
             if (bean.cid == choices[0].title) {
-              print(bean.offset);
               bean.page = HomeMainPage(
                 cid: bean.cid,
-                currentPage: bean.currentPage,
+                pageState: pageState,
+                titles: titles,
               );
             } else if (bean.cid == choices[1].title) {
               bean.page = Text("第二页");
