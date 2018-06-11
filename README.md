@@ -7,14 +7,16 @@ bilibli第三方应用，使用Flutter编写，项目中用到的api均抓包得
 ### 效果图
 ##### IOS
 
-![](https://github.com/304449912/Flutter_bilibli/blob/master/screen/1.jpeg)
-![](https://github.com/304449912/Flutter_bilibli/blob/master/screen/2.jpeg)
-![](https://github.com/304449912/Flutter_bilibli/blob/master/screen/3.jpeg)
-![](https://github.com/304449912/Flutter_bilibli/blob/master/screen/4.jpeg)
-![](https://github.com/304449912/Flutter_bilibli/blob/master/screen/5.jpeg)
+< img src="1.jpeg" height="300em" />
+< img src="2.jpeg" height="300em" />
+< img src="3.jpeg" height="300em" />
+< img src="4.jpeg" height="300em" />
+< img src="5.jpeg" height="300em" />
+
 ##### Android
-![](https://github.com/304449912/Flutter_bilibli/blob/master/screen/6.jpeg)
-![](https://github.com/304449912/Flutter_bilibli/blob/master/screen/7.jpeg)
-![](https://github.com/304449912/Flutter_bilibli/blob/master/screen/8.jpeg)
-![](https://github.com/304449912/Flutter_bilibli/blob/master/screen/9.jpeg)
-![](https://github.com/304449912/Flutter_bilibli/blob/master/screen/10.jpeg)
+
+< img src="6.jpeg" height="300em" />
+< img src="7.jpeg" height="300em" />
+< img src="8.jpeg" height="300em" />
+< img src="9.jpeg" height="300em" />
+< img src="10.jpeg" height="300em" />
